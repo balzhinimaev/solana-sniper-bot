@@ -1,0 +1,22 @@
+# Зависимости
+node_modules/
+dist/
+.env
+
+# Логи и временные файлы
+*.log
+*.tmp
+.DS_Store
+
+# IDE
+.vscode/
+.idea/
+
+# Тесты
+coverage/
+jest.config.js
+
+# Другое
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
