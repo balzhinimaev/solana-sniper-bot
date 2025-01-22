@@ -1,15 +1,22 @@
 import { Context, Scenes } from "telegraf";
 
-// Интерфейс сессии для Wizard-сцены
 interface MyWizardSession extends Scenes.WizardSessionData {
-    cursor: number; // Обязательное поле для wizard-сцен
-    page?: number; // Дополнительное поле для хранения текущей страницы
-    // Добавьте любые другие поля, которые могут быть нужны для сессии
+    cursor: number;
+    page?: number;
+    walletData?: {
+        isConnecting?: boolean;
+        isUpdating?: boolean;
+    };
+    settingsData?: {
+        isEditingAmount?: boolean;
+        isEditingSlippage?: boolean;
+        purchaseAmount?: number;
+        slippage?: number;
+    };
 }
 
-// Интерфейс контекста
 export interface MyContext extends Context {
     scene: Scenes.SceneContextScene<MyContext, MyWizardSession>;
     wizard: Scenes.WizardContextWizard<MyContext>;
-    session: MyWizardSession & Scenes.WizardSession<MyWizardSession>; // Поддержка кастомной wizard-сессии
+    session: MyWizardSession & Scenes.WizardSession<MyWizardSession>;
 }

@@ -4,9 +4,10 @@ import { Telegraf, session, Scenes } from "telegraf";
 import { config } from "../config";
 import { MyContext } from "./types/MyContext";
 import { mainMenu } from "./menus/mainMenu";
-import { walletScene } from "./scenes/walletScene";
 import { getNgrokUrl } from "../utils/ngrok";
 import logger from "../utils/logger";
+import { homeScene } from "./scenes/homeScene";
+import { walletWizard } from "./scenes/walletWizard";
 
 export const bot = new Telegraf<MyContext>(config.botToken);
 const app = express();
@@ -26,17 +27,18 @@ export const setupWebhook = async () => {
 };
 
 // Сцены
-const stage = new Scenes.Stage<MyContext>([walletScene]);
+const stage = new Scenes.Stage<MyContext>([walletWizard, homeScene]);
 bot.use(session());
 bot.use(stage.middleware());
 
 // Стартовая команда
 bot.start(async (ctx) => {
-    await ctx.reply("Добро пожаловать в Solana Sniper Bot!", mainMenu);
+    try {
+        ctx.scene.enter("home")
+    } catch (error) {
+        logger.error(error)
+    }
 });
-
-// Обработка главного меню
-bot.action("wallet_action", (ctx) => ctx.scene.enter("wallet_scene"));
 
 // Интеграция с Express
 app.use(express.json());
